@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Draw_Sh.h"
-#include "Matrix.h"
+#include "Dependencies/Matrix.h"
 #include <string>
 #include <Windows.h>
 
