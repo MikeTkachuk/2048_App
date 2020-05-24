@@ -156,7 +156,9 @@ public:
 	//matrix transformation with the given movement:
 	//from the right and counter-clockwise (1-right,2-top,3-left,4-bottom)
 	void Movement( sf::RenderWindow& window, int movement_type) {
-		
+		if (game_over)
+			return;
+
 		matrix store_Tiles = Tiles;
 		
 		int store_free_space;
@@ -181,9 +183,7 @@ public:
 								Tiles.Write(i, store_free_space, (Tiles[i][k] + Tiles[i][store_free_space]));
 							else Tiles.Write(i, store_free_space, -(Tiles[i][k] + Tiles[i][store_free_space]));
 							
-							//if (Tiles[i][store_free_space] == Tiles[i][k]) 
 								Change.Write(i, k, abs(store_free_space - k));
-							//else Change.Write(i, k, abs(store_free_space - k) + 0.5);
 						
 							Tiles.Write(i, k, 0);
 						}
@@ -213,9 +213,7 @@ public:
 								Tiles.Write(store_free_space, k, (Tiles[i][k] + Tiles[store_free_space][k]));
 							else Tiles.Write(store_free_space, k, -(Tiles[i][k] + Tiles[store_free_space][k]));
 							
-							//if (Tiles[store_free_space][k] == Tiles[i][k])
 								Change.Write(i, k, abs(i - store_free_space));
-							//else Change.Write(i, k, abs(i - store_free_space) + 0.5);
 
 							Tiles.Write(i, k, 0);
 						}
@@ -245,9 +243,7 @@ public:
 								Tiles.Write(i, store_free_space, (Tiles[i][k] + Tiles[i][store_free_space]));
 							else Tiles.Write(i, store_free_space, -(Tiles[i][k] + Tiles[i][store_free_space]));
 							
-							//if (Tiles[i][store_free_space] == Tiles[i][k])
 								Change.Write(i, k, abs(k - store_free_space));
-							//else Change.Write(i, k, abs(k - store_free_space)+0.5);
 
 							Tiles.Write(i, k, 0);
 						}
@@ -277,9 +273,7 @@ public:
 								Tiles.Write(store_free_space, k, (Tiles[i][k] + Tiles[store_free_space][k]));
 							else Tiles.Write(store_free_space, k, -(Tiles[i][k] + Tiles[store_free_space][k]));
 							
-							//if (Tiles[store_free_space][k] == Tiles[i][k])
 								Change.Write(i, k, abs(store_free_space - i));
-							//else Change.Write(i, k, abs(store_free_space - i) + 0.5);
 
 							Tiles.Write(i, k, 0);
 						}
@@ -309,13 +303,20 @@ public:
 		if (New_tile.x > -1 && New_tile.y > -1) {
 			move_interruption=Movement_animation(window, movement_type, New_tile);
 		}
+		
+		
+		/*change this in case of failure*/
+		game_over = !Check_all_moves();
+		
 		Change.Init(tile_count, tile_count);
 		
-		
-		//game_over = !Check_all_moves();
 		if (game_over) {
-			//Game_over_animation(window);
+			Clear_Pground(window);
+			Draw_Pground(window);
+			window.display();
+			Game_over_animation(window);
 		}
+
 		if (move_interruption != 0 && !game_over) {
 			Movement(window, move_interruption);
 		}
@@ -884,17 +885,10 @@ matrix Merged_tiles(int movement_type) {
 
 		///
 
-		int frame = 0, max_frame = 1000;
+		int frame = 0, max_frame = 40;
 
 		while (frame < max_frame) {
-			faded_pground.setFillColor(sf::Color(240, 240, 240, 0));
-			display_text_1.setFillColor(sf::Color(143, 122, 102, 0));
-			display_text_2.setFillColor(sf::Color(143, 122, 102, 0));
-
-
-			window.draw(faded_pground);
-			window.draw(display_text_1);
-			window.draw(display_text_2);
+			Draw_Pground(window);
 			window.display();
 			frame++;
 		}
@@ -906,6 +900,7 @@ matrix Merged_tiles(int movement_type) {
 			display_text_1.setFillColor(sf::Color(143, 122, 102, 255 * frame / float(max_frame)));
 			display_text_2.setFillColor(sf::Color(143, 122, 102, 255 * frame / float(max_frame)));
 
+			Draw_Pground(window);
 
 			window.draw(faded_pground);
 			window.draw(display_text_1);
@@ -913,7 +908,7 @@ matrix Merged_tiles(int movement_type) {
 			window.display();
 			frame++;
 		}
-
+		Sleep(1000);
 	}
 
 

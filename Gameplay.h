@@ -61,7 +61,6 @@ public:
             //Game Over event
             if (playground.isGameOver()) {
                Game_over_scene(window);
-
             }
 
             window.display();
@@ -148,6 +147,15 @@ public:
                     break;
                 }
 
+                if (event.type == sf::Event::KeyPressed) {
+                    if (event.key.code == 36) {
+                        window.close();
+                    }
+                }
+
+                if (event.type == sf::Event::Closed)
+                    window.close();
+
             }
 
             window.draw(white_screen);
@@ -191,10 +199,7 @@ public:
         int frame = 0, max_frame=12;
 
         while (frame < max_frame) {
-            Draw_Background(window);
-            undo_buton.Draw(window);
-            new_game_button.Draw(window);
-            ai_button.Draw(window);
+            Draw_Static_Entities(window);
 
             playground.Clear_Pground(window);
             playground.Draw_Frame(window);
