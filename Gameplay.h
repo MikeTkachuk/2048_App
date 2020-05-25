@@ -22,13 +22,16 @@ public:
 
 	}
 	Gameplay(int N, sf::Vector2u Size) {
+        float window_size;
+        window_size = min(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
+
 		playground.Init(N, Size);
 		playground.setColor(sf::Color(187, 173, 160, 255));
 		
-        undo_buton.Init(sf::Vector2f(230,70),10,sf::Vector2f(1375, 435),sf::Color(143, 122, 102,255), "Undo", sf::Color(255,253,230, 255),1 , 1);
-        new_game_button.Init(sf::Vector2f(230, 70), 10, sf::Vector2f(1375, 235), sf::Color(103, 88, 73, 255), "New Game", sf::Color(255, 253, 230, 255), 1, 1);
-		ai_button.Init(sf::Vector2f(350, 90), 10, sf::Vector2f(200, 80), sf::Color(60, 60, 60, 255), "Give AI a try", sf::Color(255, 253, 230, 255), 1, 1);
-        tip_button.Init(sf::Vector2f(350, 75), 20, sf::Vector2f(200, 180), sf::Color(60, 60, 60, 255), "AI tips", sf::Color(255, 253, 230, 255), 1, 1);
+        undo_buton.Init(sf::Vector2f(230,70)/float(2000)*window_size,10 / float(2000) * window_size,sf::Vector2f(1375, 435) / float(2000) * window_size,sf::Color(143, 122, 102,255), "Undo", sf::Color(255,253,230, 255),1 , 1);
+        new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), "New Game", sf::Color(255, 253, 230, 255), 1, 1);
+		ai_button.Init(sf::Vector2f(350, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 80) / float(2000) * window_size, sf::Color(60, 60, 60, 255), "Give AI a try", sf::Color(255, 253, 230, 255), 1, 1);
+        tip_button.Init(sf::Vector2f(350, 75) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 180) / float(2000) * window_size, sf::Color(60, 60, 60, 255), "AI tips", sf::Color(255, 253, 230, 255), 1, 1);
         reached_2048 = 0;
     }
 
@@ -126,7 +129,7 @@ public:
         display_text.setStyle(sf::Text::Regular);
 
 
-        display_text.setCharacterSize(250);
+        display_text.setCharacterSize(250 / float(2000) * window.getSize().x);
 
         sf::FloatRect bounds = display_text.getGlobalBounds();
 
@@ -236,8 +239,8 @@ public:
         display_text_2.setStyle(sf::Text::Regular);
 
 
-        display_text_1.setCharacterSize(100);
-        display_text_2.setCharacterSize(40);
+        display_text_1.setCharacterSize(100/float(2000)*window.getSize().x);
+        display_text_2.setCharacterSize(40 / float(2000) * window.getSize().x);
 
         display_text_1.setFillColor(sf::Color(143, 122, 102, 255));
         display_text_2.setFillColor(sf::Color(143, 122, 102, 255));

@@ -846,6 +846,7 @@ matrix Merged_tiles(int movement_type) {
 
 	
 	void Game_over_animation(sf::RenderWindow& window) {
+
 		sf::RectangleShape faded_pground((sf::Vector2f)getSize());
 		faded_pground.setOrigin(faded_pground.getSize() / (float)2);
 		faded_pground.setPosition((sf::Vector2f)window.getSize() / float(2));
@@ -867,8 +868,8 @@ matrix Merged_tiles(int movement_type) {
 		display_text_2.setStyle(sf::Text::Regular);
 
 
-		display_text_1.setCharacterSize(100);
-		display_text_2.setCharacterSize(40);
+		display_text_1.setCharacterSize(100 / float(2000) * window.getSize().x);
+		display_text_2.setCharacterSize(40 / float(2000) * window.getSize().x);
 
 		display_text_1.setFillColor(sf::Color(143, 122, 102, 255));
 		display_text_2.setFillColor(sf::Color(143, 122, 102, 255));
@@ -908,7 +909,6 @@ matrix Merged_tiles(int movement_type) {
 			window.display();
 			frame++;
 		}
-		Sleep(1000);
 	}
 
 
