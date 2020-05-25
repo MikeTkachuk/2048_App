@@ -177,6 +177,7 @@ public:
         while (frame < max_frame*0.45) {
 
             Draw_Static_Entities(window);
+            playground.Draw_Pground(window);
 
             white_screen.setFillColor(sf::Color(255,255,255,255-255*frame/(max_frame*0.45)));
             window.draw(white_screen);
