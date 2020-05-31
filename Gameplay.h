@@ -13,13 +13,11 @@ private:
 	
 	Playground playground;
 	Button undo_buton, new_game_button, ai_button, tip_button;
-    bool reached_2048;
-
+    bool ai_turned_on;
 public:
 
 	Gameplay() {
-        reached_2048 = 0;
-
+      
 	}
 	Gameplay(int N, sf::Vector2u Size) {
         float window_size;
@@ -32,7 +30,7 @@ public:
         new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), "New Game", sf::Color(255, 253, 230, 255), 1, 1);
 		ai_button.Init(sf::Vector2f(350, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 80) / float(2000) * window_size, sf::Color(60, 60, 60, 255), "Give AI a try", sf::Color(255, 253, 230, 255), 1, 1);
         tip_button.Init(sf::Vector2f(350, 75) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 180) / float(2000) * window_size, sf::Color(60, 60, 60, 255), "AI tips", sf::Color(255, 253, 230, 255), 1, 1);
-        reached_2048 = 0;
+        ai_turned_on = 0;
     }
 
 
@@ -53,6 +51,8 @@ public:
         }
         sf::Vector2f Mouse_Pressed;
 
+        int ai_executive = 1;
+
         while (window.isOpen())
         {
             
@@ -66,7 +66,29 @@ public:
                Game_over_scene(window);
             }
 
+            if (playground.isWin()) {
+                Win_scene(window);
+            }
+
             window.display();
+            if (ai_turned_on) {
+                playground.Movement(window, ai_executive);
+                ai_executive++;
+                if (ai_executive > 4)
+                    ai_executive = 1;
+                playground.Movement(window, ai_executive);
+                ai_executive++;
+                if (ai_executive > 4)
+                    ai_executive = 1;
+                playground.Movement(window, ai_executive);
+                ai_executive++;
+                if (ai_executive > 4)
+                    ai_executive = 1;
+                playground.Movement(window, ai_executive);
+                ai_executive++;
+                if (ai_executive > 4)
+                    ai_executive = 1;
+            }
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -82,9 +104,11 @@ public:
                         New_game(window);
                     }
                     if (ai_button.getBounds().contains(Mouse_Pressed) && ai_button.isActive()) {
-
+                        ai_turned_on = !ai_turned_on;
                     }
                 }
+
+               
 
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == 72|| event.key.code == 3) {
@@ -262,6 +286,50 @@ public:
 
     }
 
+    void Win_scene(sf::RenderWindow& window) {
+        sf::RectangleShape faded_pground((sf::Vector2f)playground.getSize());
+        faded_pground.setOrigin(faded_pground.getSize() / (float)2);
+        faded_pground.setPosition((sf::Vector2f)window.getSize() / float(2));
+        faded_pground.setFillColor(sf::Color(240, 240, 240, 150));
+
+        //Loading font
+        sf::Text display_text_1, display_text_2;
+        sf::Font font;
+        if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
+            std::cout << "Error loading font!\n";
+        display_text_1.setString("Congratulations!");
+        display_text_2.setString("To continue, press Undo or New Game");
+
+
+        display_text_1.setFont(font);
+        display_text_2.setFont(font);
+
+        display_text_1.setStyle(sf::Text::Regular);
+        display_text_2.setStyle(sf::Text::Regular);
+
+
+        display_text_1.setCharacterSize(100 / float(2000) * window.getSize().x);
+        display_text_2.setCharacterSize(40 / float(2000) * window.getSize().x);
+
+        display_text_1.setFillColor(sf::Color(143, 122, 102, 255));
+        display_text_2.setFillColor(sf::Color(143, 122, 102, 255));
+
+
+        sf::FloatRect bounds1 = display_text_1.getGlobalBounds();
+        sf::FloatRect bounds2 = display_text_2.getGlobalBounds();
+
+        display_text_1.setOrigin(bounds1.width / 2 + bounds1.left, bounds1.height / 2 + bounds1.top);
+        display_text_1.setPosition((sf::Vector2f)window.getSize() / (float)2);
+
+        display_text_2.setOrigin(bounds2.width / 2 + bounds2.left, bounds2.height / 2 + bounds2.top);
+        display_text_2.setPosition((sf::Vector2f)window.getSize() / (float)2 + sf::Vector2f(0, 2.5 * bounds1.height));
+
+        ///
+        window.draw(faded_pground);
+        window.draw(display_text_1);
+        window.draw(display_text_2);
+
+    }
 
     void Draw_Background(sf::RenderWindow& window) {
         sf::RectangleShape ambient((sf::Vector2f)window.getSize());

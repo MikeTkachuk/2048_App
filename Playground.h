@@ -23,6 +23,8 @@ private:
 	matrix Movement_Backup;
 	matrix Change; //Contains information about the movement process
 	bool game_over;
+	bool reached_2048;
+
 
 	sf::Vector2u size;
 	sf::Color color;
@@ -49,6 +51,7 @@ public:
 		Movement_Backup = Tiles;
 		Change.Init(N, N);
 		game_over = 0;
+		reached_2048 = 0;
 
 		tile_count = N;
 		size = sf::Vector2u(Size, Size);
@@ -65,6 +68,7 @@ public:
 		Movement_Backup = Tiles;
 		Change.Init(N, N);
 		game_over = 0;
+		reached_2048 = 0;
 
 		tile_count = N;
 		size =  Size;
@@ -92,6 +96,9 @@ public:
 	}
 	bool isGameOver() {
 		return game_over;
+	}
+	bool isWin() {
+		return reached_2048;
 	}
 
 
@@ -151,12 +158,13 @@ public:
 		Movement_Backup.Init(tile_count, tile_count);
 		Change.Init(tile_count, tile_count);
 		game_over = 0;
+		reached_2048 = 0;
 	}
 
 	//matrix transformation with the given movement:
 	//from the right and counter-clockwise (1-right,2-top,3-left,4-bottom)
 	void Movement( sf::RenderWindow& window, int movement_type) {
-		if (game_over)
+		if (game_over||reached_2048)
 			return;
 
 		matrix store_Tiles = Tiles;
@@ -305,7 +313,7 @@ public:
 		}
 		
 		
-		/*change this in case of failure*/
+		
 		game_over = !Check_all_moves();
 		
 		Change.Init(tile_count, tile_count);
@@ -317,9 +325,20 @@ public:
 			Game_over_animation(window);
 		}
 
+		if (Tiles.getMax_el() >= 2048) {
+			reached_2048 = 1;
+			Clear_Pground(window);
+			Draw_Pground(window);
+			window.display();
+			Win_animation(window);
+		}
+
 		if (move_interruption != 0 && !game_over) {
 			Movement(window, move_interruption);
 		}
+
+		
+
 	}
 
 	bool Check_all_moves() {
@@ -531,10 +550,7 @@ public:
 
 
 
-	//Draw the background
-
-	
-
+	//Draw the background frame
 	void Draw_Frame(sf::RenderWindow& window) {
 		sf::Color color_variations = color;
 		
@@ -822,6 +838,7 @@ matrix Merged_tiles(int movement_type) {
 
 	void Reset_Move(sf::RenderWindow& window) {
 		game_over = 0;
+		reached_2048 = 0;
 		if (Movement_Backup != matrix(tile_count, tile_count)) {
 			int frame = 0, max_frame = 10;
 			while (frame <= max_frame) {
@@ -858,6 +875,72 @@ matrix Merged_tiles(int movement_type) {
 		if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
 			std::cout << "Error loading font!\n";
 		display_text_1.setString("Game over!");
+		display_text_2.setString("To continue, press Undo or New Game");
+
+
+		display_text_1.setFont(font);
+		display_text_2.setFont(font);
+
+		display_text_1.setStyle(sf::Text::Regular);
+		display_text_2.setStyle(sf::Text::Regular);
+
+
+		display_text_1.setCharacterSize(100 / float(2000) * window.getSize().x);
+		display_text_2.setCharacterSize(40 / float(2000) * window.getSize().x);
+
+		display_text_1.setFillColor(sf::Color(143, 122, 102, 255));
+		display_text_2.setFillColor(sf::Color(143, 122, 102, 255));
+
+
+		sf::FloatRect bounds1 = display_text_1.getGlobalBounds();
+		sf::FloatRect bounds2 = display_text_2.getGlobalBounds();
+
+		display_text_1.setOrigin(bounds1.width / 2 + bounds1.left, bounds1.height / 2 + bounds1.top);
+		display_text_1.setPosition((sf::Vector2f)window.getSize() / (float)2);
+
+		display_text_2.setOrigin(bounds2.width / 2 + bounds2.left, bounds2.height / 2 + bounds2.top);
+		display_text_2.setPosition((sf::Vector2f)window.getSize() / (float)2 + sf::Vector2f(0, 2.5 * bounds1.height));
+
+		///
+
+		int frame = 0, max_frame = 40;
+
+		while (frame < max_frame) {
+			Draw_Pground(window);
+			window.display();
+			frame++;
+		}
+
+		frame = 0; max_frame = 20;
+
+		while (frame <= max_frame) {
+			faded_pground.setFillColor(sf::Color(240, 240, 240, 150 * frame / float(max_frame)));
+			display_text_1.setFillColor(sf::Color(143, 122, 102, 255 * frame / float(max_frame)));
+			display_text_2.setFillColor(sf::Color(143, 122, 102, 255 * frame / float(max_frame)));
+
+			Draw_Pground(window);
+
+			window.draw(faded_pground);
+			window.draw(display_text_1);
+			window.draw(display_text_2);
+			window.display();
+			frame++;
+		}
+	}
+
+	void Win_animation(sf::RenderWindow& window) {
+
+		sf::RectangleShape faded_pground((sf::Vector2f)getSize());
+		faded_pground.setOrigin(faded_pground.getSize() / (float)2);
+		faded_pground.setPosition((sf::Vector2f)window.getSize() / float(2));
+		faded_pground.setFillColor(sf::Color(240, 240, 240, 150));
+
+		//Loading font
+		sf::Text display_text_1, display_text_2;
+		sf::Font font;
+		if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
+			std::cout << "Error loading font!\n";
+		display_text_1.setString("Congratulations!");
 		display_text_2.setString("To continue, press Undo or New Game");
 
 
