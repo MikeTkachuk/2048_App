@@ -42,6 +42,16 @@ public:
 		}
 		len = length;
 	}
+	vect(int length, int* value) {
+		Init(length, value);
+	}
+	void Init(int length, int* value) {
+		root = new double[length];
+		for (int i = 0; i < length; i++) {
+			root[i] = value[i];
+		}
+		len = length;
+	}
 
 	vect(double x, double y, double z) {
 		Init(x, y, z);
@@ -66,6 +76,17 @@ public:
 		}
 		len = 3;
 	}
+	vect(int* value) {
+		Init(value);
+	}
+	void Init(int* value) {
+		root = new double[3];
+		for (int i = 0; i < 3; i++) {
+			root[i] = value[i];
+		}
+		len = 3;
+	}
+
 
 	vect& randomize(double norma) {
 		double b;
@@ -125,7 +146,7 @@ public:
 	}
 	
 
-	//ASSIGNMENT OPERATOR
+	//ASSIGNMENT OPERATORS
 	vect& operator = (const vect& X) {
 		removeRoot();
 		len = X.len;
@@ -135,7 +156,14 @@ public:
 		}
 		return *this;
 	}
-
+	vect& operator +=(const vect& X) {
+		*this = *this + X;
+		return *this;
+	}
+	vect& operator -=(const vect& X) {
+		*this = *this - X;
+		return *this;
+	}
 	//BINARY ADDITION
 	vect operator + (const vect& X) {
 		if (len != X.len) {
@@ -219,6 +247,19 @@ public:
 
 	bool  operator != (const vect& X) {
 		return !(*this==X);
+	}
+
+	//TRANSFORMATION OPERATORS
+
+	operator int* () {
+		int* ret = new int[len];
+		for (int i = 0; i < len; i++) {
+			ret[i] = (int)root[i];
+		}
+		return ret;
+	}
+	operator double* () {
+		return vect(*this).root;
 	}
 
 	//STREAM OPERATORS

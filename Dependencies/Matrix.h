@@ -218,6 +218,21 @@ public:
 
 		return max;
 	}
+	int get_Zero_count() {
+		if (root == 0 || row == 0 || col == 0) {
+			cout << "Can't process an empty matrix.";
+			system("pause");
+			return -INFINITY;
+		}
+		int count = 0;
+		for (int i = 0; i < row; i++) {
+			for (int k = 0; k < col; k++) {
+				if (root[i][k] == 0)
+					count++;
+			}
+		}
+		return count;
+	}
 
 	//FAST REFERENCE FUNCTIONS
 

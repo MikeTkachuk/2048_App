@@ -24,11 +24,14 @@ private:
 	matrix Change; //Contains information about the movement process
 	bool game_over;
 	bool reached_2048;
+	bool ai_turned_on;
+
 
 
 	sf::Vector2u size;
 	sf::Color color;
 	sf::Color Text_Color = setColor_vector(Text_Color, 10, 10, 10, 175);
+	sf::Font universal_font;
 public:
 	Playground() {
 		tile_count = 0;
@@ -39,6 +42,10 @@ public:
 		tile_count = 0;
 		size = sf::Vector2u(0, 0);
 		game_over = 0;
+		ai_turned_on = 0;
+
+		if (!universal_font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
+			std::cout << "Error loading font!\n";
 	}
 
 	//N-set tile count Size-playground Size when displayed
@@ -52,9 +59,12 @@ public:
 		Change.Init(N, N);
 		game_over = 0;
 		reached_2048 = 0;
+		ai_turned_on = 0;
 
 		tile_count = N;
 		size = sf::Vector2u(Size, Size);
+		if (!universal_font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
+			std::cout << "Error loading font!\n";
 
 	}
 
@@ -69,9 +79,13 @@ public:
 		Change.Init(N, N);
 		game_over = 0;
 		reached_2048 = 0;
+		ai_turned_on = 0;
+
 
 		tile_count = N;
 		size =  Size;
+		if (!universal_font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
+			std::cout << "Error loading font!\n";
 
 	}
 
@@ -80,6 +94,9 @@ public:
 	}
 	void setGameOver(bool g_o) {
 		game_over = g_o;
+	}
+	void changeAIstate() {
+		ai_turned_on = !ai_turned_on;
 	}
 
 	sf::Color getColor() {
@@ -100,7 +117,9 @@ public:
 	bool isWin() {
 		return reached_2048;
 	}
-
+	bool isAIon() {
+		return ai_turned_on;
+	}
 
 	//Set a random-power tile at the random spare position, return the position
 	sf::Vector2i Set_new_tile(int max_power) {
@@ -485,10 +504,8 @@ public:
 
 		//Loading font
 		sf::Text display_value;
-		sf::Font font;
-		if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
-			std::cout << "Error loading font!\n";
-		display_value.setFont(font);
+		
+		display_value.setFont(universal_font);
 		display_value.setStyle(sf::Text::Regular);
 
 	
@@ -728,6 +745,9 @@ matrix Merged_tiles(int movement_type) {
 			if (window.pollEvent(event)) {
 				if (event.type == sf::Event::Closed)
 					window.close();
+				if (event.type == sf::Event::MouseButtonPressed) {
+					ai_turned_on = 0;
+				}
 				if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == 72 || event.key.code == 3) {
 						return 1;
@@ -871,15 +891,13 @@ matrix Merged_tiles(int movement_type) {
 
 		//Loading font
 		sf::Text display_text_1, display_text_2;
-		sf::Font font;
-		if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
-			std::cout << "Error loading font!\n";
+		
 		display_text_1.setString("Game over!");
 		display_text_2.setString("To continue, press Undo or New Game");
 
 
-		display_text_1.setFont(font);
-		display_text_2.setFont(font);
+		display_text_1.setFont(universal_font);
+		display_text_2.setFont(universal_font);
 
 		display_text_1.setStyle(sf::Text::Regular);
 		display_text_2.setStyle(sf::Text::Regular);
@@ -937,15 +955,13 @@ matrix Merged_tiles(int movement_type) {
 
 		//Loading font
 		sf::Text display_text_1, display_text_2;
-		sf::Font font;
-		if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
-			std::cout << "Error loading font!\n";
+		
 		display_text_1.setString("Congratulations!");
 		display_text_2.setString("To continue, press Undo or New Game");
 
 
-		display_text_1.setFont(font);
-		display_text_2.setFont(font);
+		display_text_1.setFont(universal_font);
+		display_text_2.setFont(universal_font);
 
 		display_text_1.setStyle(sf::Text::Regular);
 		display_text_2.setStyle(sf::Text::Regular);

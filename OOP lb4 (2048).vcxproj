@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI move.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Draw_Sh.cpp" />
     <ClCompile Include="main.cpp" />
@@ -90,6 +91,7 @@
     <ClCompile Include="Gameplay.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI move.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Draw_Sh.h" />
     <ClInclude Include="Playground.h" />

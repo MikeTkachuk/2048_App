@@ -19,3 +19,8 @@ sf::Color setColor_vector(unsigned a, unsigned b, unsigned c, unsigned d) {
 	sf::Color color(a, b, c, d);
 	return color;
 }
+
+sf::Color contrast(sf::Color c) {
+	sf::Color color(255 - c.r, 255 - c.g, 255 - c.b, c.a);
+	return color;
+}

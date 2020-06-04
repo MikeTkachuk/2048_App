@@ -13,6 +13,7 @@ class Button
 {
 private:
 	Smooth_rect body;
+	Smooth_rect outline;
 	string text;
 	sf::Color text_color;
 	int Char_Size;
@@ -25,31 +26,37 @@ public:
 		text_color = sf::Color::White;
 	}
 
-	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, string t, sf::Color tcolor) {
+	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor) {
 		body.Init(Size, R, Pos);
 		body.setColor(bodycolor);
+		outline.Init(Size + sf::Vector2f(outline_width, outline_width), R, Pos);
+		outline.setColor(contrast(bodycolor));
 		text = t;
 		text_color = tcolor;
 	}
-	void Init(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, string t, sf::Color tcolor) {
+	void Init(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor) {
 		body.Init(Size, R, Pos);
 		body.setColor(bodycolor);
 		text = t;
 		text_color = tcolor;
 	}
 
-	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, string t, sf::Color tcolor, bool vis, bool act) {
+	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor, bool vis, bool act) {
 		body.Init(Size, R, Pos);
 		body.setColor(bodycolor);
+		outline.Init(Size + sf::Vector2f(outline_width, outline_width), R, Pos);
+		outline.setColor(contrast(bodycolor));
 		text = t;
 		text_color = tcolor;
 		Char_Size = 40;
 		visible = vis;
 		active = act;
 	}
-	void Init(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, string t, sf::Color tcolor, bool vis, bool act) {
+	void Init(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor, bool vis, bool act) {
 		body.Init(Size, R, Pos);
 		body.setColor(bodycolor);
+		outline.Init(Size + sf::Vector2f(outline_width, outline_width), R, Pos);
+		outline.setColor(contrast(bodycolor));
 		text = t;
 		text_color = tcolor;
 		Char_Size = 40;
@@ -98,6 +105,7 @@ public:
 	void setPosition(sf::Vector2f p) {
 		body.setPosition(p);
 	}
+
 	void setVisibility(bool i) {
 		visible = i;
 	}
@@ -106,8 +114,15 @@ public:
 	}
 
 
+	void Press(sf::RenderWindow& window) {
+		body.setColor(contrast(body.getColor()));
+		outline.setColor(contrast(outline.getColor()));
+		Draw(window);
+	}
+
 	void Draw(sf::RenderWindow& window) {
 		if (visible) {
+			outline.Draw(window);
 			body.Draw(window);
 
 			//Loading font

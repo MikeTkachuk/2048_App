@@ -44,6 +44,9 @@ public:
 	sf::Vector2f getPosition() {
 		return Position;
 	}
+	sf::Color getColor() {
+		return color;
+	}
 
 	void setColor(sf::Color c) {
 		color = c;
@@ -92,3 +95,5 @@ public:
 sf::Color setColor_vector(sf::Color& color, unsigned a, unsigned b, unsigned c, unsigned d);
 sf::Color setColor_vector(sf::Color& color, unsigned a, unsigned b, unsigned c);
 sf::Color setColor_vector(unsigned a, unsigned b, unsigned c, unsigned d);
+
+sf::Color contrast(sf::Color c);

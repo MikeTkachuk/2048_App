@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "Playground.h"
 #include "Button.h"
+#include "AI move.h"
 using namespace sf;
 
 class Gameplay
@@ -13,7 +14,6 @@ private:
 	
 	Playground playground;
 	Button undo_buton, new_game_button, ai_button, tip_button;
-    bool ai_turned_on;
 public:
 
 	Gameplay() {
@@ -26,11 +26,10 @@ public:
 		playground.Init(N, Size);
 		playground.setColor(sf::Color(187, 173, 160, 255));
 		
-        undo_buton.Init(sf::Vector2f(230,70)/float(2000)*window_size,10 / float(2000) * window_size,sf::Vector2f(1375, 435) / float(2000) * window_size,sf::Color(143, 122, 102,255), "Undo", sf::Color(255,253,230, 255),1 , 1);
-        new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), "New Game", sf::Color(255, 253, 230, 255), 1, 1);
-		ai_button.Init(sf::Vector2f(350, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 80) / float(2000) * window_size, sf::Color(60, 60, 60, 255), "Give AI a try", sf::Color(255, 253, 230, 255), 1, 1);
-        tip_button.Init(sf::Vector2f(350, 75) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 180) / float(2000) * window_size, sf::Color(60, 60, 60, 255), "AI tips", sf::Color(255, 253, 230, 255), 1, 1);
-        ai_turned_on = 0;
+        undo_buton.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 435) / float(2000) * window_size, sf::Color(143, 122, 102, 255), 0, "Undo", sf::Color(255, 253, 230, 255), 1, 1);
+        new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), 0, "New Game", sf::Color(255, 253, 230, 255), 1, 1);
+        ai_button.Init(sf::Vector2f(350, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 80) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "Give AI a try", sf::Color(255, 253, 230, 255), 1, 1);
+        tip_button.Init(sf::Vector2f(350, 75) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 180) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "AI tips", sf::Color(255, 253, 230, 255), 1, 1);
     }
 
 
@@ -52,7 +51,10 @@ public:
         sf::Vector2f Mouse_Pressed;
 
         int ai_executive = 1;
-
+        int ai_for_decision_purposes;
+        vect to_sum_up_possibilities(4);
+        Decision_Tree decision;
+        //int test_tries = 0;
         while (window.isOpen())
         {
             
@@ -64,6 +66,9 @@ public:
             //Game Over event
             if (playground.isGameOver()) {
                Game_over_scene(window);
+               //New_game(window);
+               //std::cout << "Failed on Try #" << test_tries + 1 << "\n";
+               //test_tries++;
             }
 
             if (playground.isWin()) {
@@ -71,23 +76,36 @@ public:
             }
 
             window.display();
-            if (ai_turned_on) {
-                playground.Movement(window, ai_executive);
-                ai_executive++;
-                if (ai_executive > 4)
-                    ai_executive = 1;
-                playground.Movement(window, ai_executive);
-                ai_executive++;
-                if (ai_executive > 4)
-                    ai_executive = 1;
-                playground.Movement(window, ai_executive);
-                ai_executive++;
-                if (ai_executive > 4)
-                    ai_executive = 1;
-                playground.Movement(window, ai_executive);
-                ai_executive++;
-                if (ai_executive > 4)
-                    ai_executive = 1;
+            if (playground.isAIon()) {
+                ai_for_decision_purposes = playground.getPground().get_Zero_count();
+                to_sum_up_possibilities.removeRoot();
+                to_sum_up_possibilities.Init(4);
+                if (ai_for_decision_purposes < 5) {
+                    for (int i = 0; i < 3; i++) {
+                        decision.Init(playground.getPground(), 3, 2);
+                        decision.Calculate();
+                        to_sum_up_possibilities += vect(4, decision.getBenefit());
+                    }
+                    to_sum_up_possibilities = to_sum_up_possibilities / 3;
+                }
+                else if (ai_for_decision_purposes < 9) {
+                    for (int i = 0; i < 1; i++) {
+                        decision.Init(playground.getPground(), 3, 0);
+                        decision.Calculate();
+                        to_sum_up_possibilities += vect(4, decision.getBenefit());
+                    }
+                }
+                else {
+                    for (int i = 0; i < 1; i++) {
+                        decision.Init(playground.getPground(), 2, 0);
+                        decision.Calculate();
+                        to_sum_up_possibilities += vect(4, decision.getBenefit());
+                    }
+                }
+                
+                playground.Movement(window, Decision_Tree().getMovement(to_sum_up_possibilities));
+                //playground.Movement(window, Decision_Tree(playground.getPground(), 2, 0).getMovement());
+
             }
             sf::Event event;
             while (window.pollEvent(event))
@@ -104,7 +122,10 @@ public:
                         New_game(window);
                     }
                     if (ai_button.getBounds().contains(Mouse_Pressed) && ai_button.isActive()) {
-                        ai_turned_on = !ai_turned_on;
+                        playground.changeAIstate();
+                        ai_button.Press(window);
+                        window.display();
+
                     }
                 }
 
