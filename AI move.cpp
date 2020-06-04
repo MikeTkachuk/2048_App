@@ -66,7 +66,10 @@ matrix Decision_Tree::Right(matrix Tiles, int m) {
 					if (Tiles[i][store_free_space] == 0)
 						Tiles.Write(i, store_free_space, (Tiles[i][k] + Tiles[i][store_free_space]));
 					else {
-						benefit[m]++;
+						if (type == 4)
+							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
+						else
+							benefit[m]++;
 						Tiles.Write(i, store_free_space, -(Tiles[i][k] + Tiles[i][store_free_space])); 
 					}
 
@@ -102,7 +105,10 @@ matrix Decision_Tree::Up(matrix Tiles, int m) {
 					if (Tiles[store_free_space][k] == 0)
 						Tiles.Write(store_free_space, k, (Tiles[i][k] + Tiles[store_free_space][k]));
 					else {
-						benefit[m]++;
+						if (type == 4)
+							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
+						else
+							benefit[m]++;
 						Tiles.Write(store_free_space, k, -(Tiles[i][k] + Tiles[store_free_space][k]));
 					}
 
@@ -140,7 +146,10 @@ matrix Decision_Tree::Left(matrix Tiles, int m) {
 					if (Tiles[i][store_free_space] == 0)
 						Tiles.Write(i, store_free_space, (Tiles[i][k] + Tiles[i][store_free_space]));
 					else {
-						benefit[m]++;
+						if (type == 4)
+							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
+						else
+							benefit[m]++;
 						Tiles.Write(i, store_free_space, -(Tiles[i][k] + Tiles[i][store_free_space]));
 					}
 					Tiles.Write(i, k, 0);
@@ -177,7 +186,10 @@ matrix Decision_Tree::Down(matrix Tiles, int m) {
 					if (Tiles[store_free_space][k] == 0)
 						Tiles.Write(store_free_space, k, (Tiles[i][k] + Tiles[store_free_space][k]));
 					else {
-						benefit[m]++;
+						if (type == 4)
+							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
+						else
+							benefit[m]++;
 						Tiles.Write(store_free_space, k, -(Tiles[i][k] + Tiles[store_free_space][k]));
 					}
 					Tiles.Write(i, k, 0);

@@ -25,6 +25,7 @@ private:
 	bool game_over;
 	bool reached_2048;
 	bool ai_turned_on;
+	bool skip_animation;
 
 
 
@@ -37,12 +38,14 @@ public:
 		tile_count = 0;
 		size = sf::Vector2u(0, 0);
 		game_over = 0;
+		skip_animation = 0;
 	}
 	void Init() {
 		tile_count = 0;
 		size = sf::Vector2u(0, 0);
 		game_over = 0;
 		ai_turned_on = 0;
+		skip_animation = 0;
 
 		if (!universal_font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
 			std::cout << "Error loading font!\n";
@@ -60,6 +63,7 @@ public:
 		game_over = 0;
 		reached_2048 = 0;
 		ai_turned_on = 0;
+		skip_animation = 0;
 
 		tile_count = N;
 		size = sf::Vector2u(Size, Size);
@@ -80,7 +84,7 @@ public:
 		game_over = 0;
 		reached_2048 = 0;
 		ai_turned_on = 0;
-
+		skip_animation = 0;
 
 		tile_count = N;
 		size =  Size;
@@ -97,6 +101,9 @@ public:
 	}
 	void changeAIstate() {
 		ai_turned_on = !ai_turned_on;
+	}
+	void setSkip_animation(bool s_a) {
+		skip_animation = s_a;
 	}
 
 	sf::Color getColor() {
@@ -119,6 +126,9 @@ public:
 	}
 	bool isAIon() {
 		return ai_turned_on;
+	}
+	bool isSkipping() {
+		return skip_animation;
 	}
 
 	//Set a random-power tile at the random spare position, return the position
@@ -327,7 +337,7 @@ public:
 		}
 		int move_interruption = 0;
 
-		if (New_tile.x > -1 && New_tile.y > -1) {
+		if (New_tile.x > -1 && New_tile.y > -1 && !skip_animation) {
 			move_interruption=Movement_animation(window, movement_type, New_tile);
 		}
 		
@@ -352,7 +362,7 @@ public:
 			Win_animation(window);
 		}
 
-		if (move_interruption != 0 && !game_over) {
+		if (move_interruption != 0 && !game_over && !skip_animation) {
 			Movement(window, move_interruption);
 		}
 

@@ -89,6 +89,7 @@ public:
 		return getMaxBenefit();
 	}
 
+	//used to instantly calculate and output then best movement based on the object data
 	int getMovement() {
 		Calculate();
 		int max = 0;
@@ -104,6 +105,7 @@ public:
 		return ret + 1;
 	}
 
+	//used to output then best movement based on the max element of the array
 	int getMovement(int* X) {
 		int max = 0;
 		int ret = 0;
@@ -115,6 +117,47 @@ public:
 		}
 		if (max == 0)
 			ret = rand() % 4;
+		return ret + 1;
+	}
+
+	//used to output then best movement based on the max element of the array and the matrix of the playground
+	int getMovement(const matrix& t, int* X) {
+		int max = 0;
+		int add_check[4]{ 0 };
+		int ret;
+		//finding max el to compare with
+		for (int i = 0; i < 4; i++) {
+			if (X[i] > max) {
+				max = X[i];
+				ret = i;
+			}
+		}
+		//if max == 0 we can already return
+		if (max == 0)
+			return rand() % 4 + 1;
+
+		//then the comparing cycle after which we get the movements that should be reviewed
+		for (int i = 0; i < 4; i++) {
+			if (X[ret] - X[i] < 2) {
+				add_check[i] = 1;
+			}
+		}
+
+
+		Decision_Tree temp(t, 1, 4);
+		temp.Calculate();
+		X = temp.getBenefit();
+		max = 0;
+		//finding max el  the 
+		for (int i = 0; i < 4; i++) {
+			if (add_check[i] == 0)
+				continue;
+			if (X[i] > max) {
+				max = X[i];
+				ret = i;
+			}
+		}
+
 		return ret + 1;
 	}
 
@@ -130,11 +173,7 @@ public:
 	}
 
 	int* getBenefit() {
-		for (int i = 0; i < 4; i++) {
-			if (benefit[i] < 0) {
-				benefit[i] = 0;
-			}
-		}
+		
 		return benefit;
 	}
 

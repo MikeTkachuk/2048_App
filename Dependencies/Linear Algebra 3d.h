@@ -148,6 +148,9 @@ public:
 
 	//ASSIGNMENT OPERATORS
 	vect& operator = (const vect& X) {
+		//if self-assigned a return is required
+		if (root == X.root)
+			return *this;
 		removeRoot();
 		len = X.len;
 		root = new double[len];

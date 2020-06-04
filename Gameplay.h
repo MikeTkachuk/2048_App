@@ -25,6 +25,7 @@ public:
 
 		playground.Init(N, Size);
 		playground.setColor(sf::Color(187, 173, 160, 255));
+        playground.setSkip_animation(1);
 		
         undo_buton.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 435) / float(2000) * window_size, sf::Color(143, 122, 102, 255), 0, "Undo", sf::Color(255, 253, 230, 255), 1, 1);
         new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), 0, "New Game", sf::Color(255, 253, 230, 255), 1, 1);
@@ -50,11 +51,16 @@ public:
         }
         sf::Vector2f Mouse_Pressed;
 
+        //vars for ai 
         int ai_executive = 1;
         int ai_for_decision_purposes;
+        int pgr_max_el;
         vect to_sum_up_possibilities(4);
         Decision_Tree decision;
-        //int test_tries = 0;
+
+        //vars for enduring game test
+        int test_tries = 0;
+        matrix pgr;
         while (window.isOpen())
         {
             
@@ -66,44 +72,60 @@ public:
             //Game Over event
             if (playground.isGameOver()) {
                Game_over_scene(window);
-               //New_game(window);
-               //std::cout << "Failed on Try #" << test_tries + 1 << "\n";
-               //test_tries++;
+               pgr = playground.getPground();
+               std::cout << "Failed on Try #" << test_tries + 1 << "  tiles:\n " << pgr << "\n";
+               test_tries++; 
+               New_game(window);
             }
 
             if (playground.isWin()) {
                 Win_scene(window);
+                std::cout << "Succeeded on Try #" << test_tries + 1 << "\n\n";
+                test_tries++;       
+                New_game(window);
             }
 
             window.display();
             if (playground.isAIon()) {
-                ai_for_decision_purposes = playground.getPground().get_Zero_count();
+                pgr = playground.getPground();
+                ai_for_decision_purposes = pgr.get_Zero_count();
+                pgr_max_el = pgr.getMax_el();
                 to_sum_up_possibilities.removeRoot();
                 to_sum_up_possibilities.Init(4);
                 if (ai_for_decision_purposes < 5) {
-                    for (int i = 0; i < 3; i++) {
-                        decision.Init(playground.getPground(), 3, 2);
+                    for (int i = 0; i < 6; i++) {
+                        if(pgr_max_el<1000)
+                            decision.Init(pgr, 3, 2);
+                        else
+                            decision.Init(pgr, 4, 2);
+
                         decision.Calculate();
                         to_sum_up_possibilities += vect(4, decision.getBenefit());
                     }
-                    to_sum_up_possibilities = to_sum_up_possibilities / 3;
+                    to_sum_up_possibilities = to_sum_up_possibilities;
+                    playground.Movement(window, Decision_Tree().getMovement(pgr, to_sum_up_possibilities));
+
                 }
                 else if (ai_for_decision_purposes < 9) {
-                    for (int i = 0; i < 1; i++) {
-                        decision.Init(playground.getPground(), 3, 0);
+                    for (int i = 0; i < 4; i++) {
+                        decision.Init(pgr, 3, 2);
                         decision.Calculate();
                         to_sum_up_possibilities += vect(4, decision.getBenefit());
                     }
+                    playground.Movement(window, Decision_Tree().getMovement(pgr, to_sum_up_possibilities));
+
                 }
                 else {
                     for (int i = 0; i < 1; i++) {
-                        decision.Init(playground.getPground(), 2, 0);
+                        decision.Init(pgr, 3, 0);
                         decision.Calculate();
                         to_sum_up_possibilities += vect(4, decision.getBenefit());
                     }
+                    playground.Movement(window, Decision_Tree().getMovement( to_sum_up_possibilities));
+
                 }
-                
-                playground.Movement(window, Decision_Tree().getMovement(to_sum_up_possibilities));
+                //playground.Movement(window, Decision_Tree().getMovement(playground.getPground(), to_sum_up_possibilities));
+                //playground.Movement(window, Decision_Tree().getMovement(to_sum_up_possibilities));
                 //playground.Movement(window, Decision_Tree(playground.getPground(), 2, 0).getMovement());
 
             }
