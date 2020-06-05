@@ -16,6 +16,7 @@ private:
 	Smooth_rect outline;
 	string text;
 	sf::Color text_color;
+	sf::Font font;
 	int Char_Size;
 	bool active, visible;
 
@@ -24,6 +25,8 @@ public:
 	Button() {
 		text = "";
 		text_color = sf::Color::White;
+		if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
+			std::cout << "Error loading font!\n";
 	}
 
 	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor) {
@@ -99,11 +102,16 @@ public:
 	bool isVisible() {
 		return visible;
 	}
+
 	void setSize(sf::Vector2f s) {
 		 body.setSize(s);
 	}
 	void setPosition(sf::Vector2f p) {
 		body.setPosition(p);
+	}
+
+	void setText(string t) {
+		text = t;
 	}
 
 	void setVisibility(bool i) {
@@ -125,15 +133,13 @@ public:
 			outline.Draw(window);
 			body.Draw(window);
 
-			//Loading font
 			sf::Text display_text;
-			sf::Font font;
-			if (!font.loadFromFile("Fonts/clearsans-1.00/TTF/ClearSans-Bold.ttf"))
-				std::cout << "Error loading font!\n";
+			
 			display_text.setString(text);
 			
 			display_text.setFont(font);
 			display_text.setStyle(sf::Text::Regular);
+			display_text.setFillColor(text_color);
 
 			
 			display_text.setCharacterSize(body.getSize().y / 2);
@@ -151,6 +157,14 @@ public:
 			window.draw(display_text);
 
 		}
+	}
+	void Vanish(sf::RenderWindow& window) {
+		sf::RectangleShape van(outline.getSize());
+		van.setOrigin(van.getSize() / float(2));
+		van.setPosition(outline.getPosition());
+		van.setFillColor(sf::Color(250, 248, 239, 255));
+		window.draw(van);
+
 	}
 
 };

@@ -200,6 +200,23 @@ public:
 		return O;
 	}
 
+	double getSum_el() {
+		if (root == 0 || row == 0 || col == 0) {
+			cout << "Can't process an empty matrix.";
+			system("pause");
+			return -INFINITY;
+		}
+		double sum = 0;
+
+		for (int i = 0; i < row; i++) {
+			for (int k = 0; k < col; k++) {
+				sum += root[i][k];
+			}
+		}
+
+		return sum;
+	}
+
 	double getMax_el() {
 		if (root == 0 || row == 0 || col == 0) {
 			cout << "Can't process an empty matrix.";

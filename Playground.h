@@ -99,6 +99,9 @@ public:
 	void setGameOver(bool g_o) {
 		game_over = g_o;
 	}
+	void setAIstate(bool a_s) {
+		ai_turned_on = a_s;
+	}
 	void changeAIstate() {
 		ai_turned_on = !ai_turned_on;
 	}
@@ -338,7 +341,7 @@ public:
 		int move_interruption = 0;
 
 		if (New_tile.x > -1 && New_tile.y > -1 && !skip_animation) {
-			move_interruption=Movement_animation(window, movement_type, New_tile);
+			move_interruption = Movement_animation(window, movement_type, New_tile);
 		}
 		
 		
@@ -658,7 +661,7 @@ public:
 	//ANIMATION
 
 
-matrix Merged_tiles(int movement_type) {
+	matrix Merged_tiles(int movement_type) {
 	matrix M(tile_count, tile_count);
 	switch (movement_type) {
 	case 1:
