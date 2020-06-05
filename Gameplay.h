@@ -55,6 +55,9 @@ public:
         //vars for enduring game test
         int test_tries = 0;
 
+        //thread for not waiting a tip
+        sf::Thread skip_tip_calculation(&Gameplay::setTip, this);
+
         while (window.isOpen())
         {
             
@@ -84,7 +87,8 @@ public:
                 tip_tile.setText("");
                 tip_tile.Draw(window);
                 window.display();
-                setTip();
+                skip_tip_calculation.launch();
+                //setTip();
                 tip_tile.Draw(window);
                 ai_calculated = 1; 
                 window.display();
