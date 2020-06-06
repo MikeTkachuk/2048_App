@@ -19,7 +19,7 @@ matrix Decision_Tree::Set_new_tile(matrix Tiles) {
 				if (type == 1) {
 					Tiles.Write(i, k, (rand()%99+1)/double(100));
 				}
-				if (type == 2) {
+				if (type == 2||type==3||type==4) {
 					if (define_power < 90)
 						Tiles.Write(i, k, pow(2, 1));
 					else
@@ -67,9 +67,12 @@ matrix Decision_Tree::Right(matrix Tiles, int m) {
 						Tiles.Write(i, store_free_space, (Tiles[i][k] + Tiles[i][store_free_space]));
 					else {
 						if (type == 4)
-							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
-						else
+							benefit[m] += Tiles[i][k] + Tiles[i][store_free_space];
+						else if(type!=3)
 							benefit[m]++;
+						else 
+							benefit[m]+=log(Tiles[i][k])/log(2)-1;
+
 						Tiles.Write(i, store_free_space, -(Tiles[i][k] + Tiles[i][store_free_space])); 
 					}
 
@@ -79,10 +82,14 @@ matrix Decision_Tree::Right(matrix Tiles, int m) {
 			}
 		}
 	}
+
 	if (!change_key) {
 		benefit[m] = -1;
 	}
 	Tiles = Tiles.doAbs();
+
+	
+
 	Tiles = Set_new_tile(Tiles);
 	return Tiles;
 }
@@ -106,9 +113,12 @@ matrix Decision_Tree::Up(matrix Tiles, int m) {
 						Tiles.Write(store_free_space, k, (Tiles[i][k] + Tiles[store_free_space][k]));
 					else {
 						if (type == 4)
-							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
-						else
+							benefit[m] += Tiles[i][k] + Tiles[i][store_free_space];
+						else if (type != 3)
 							benefit[m]++;
+						else
+							benefit[m] += log(Tiles[i][k]) / log(2) - 1;
+
 						Tiles.Write(store_free_space, k, -(Tiles[i][k] + Tiles[store_free_space][k]));
 					}
 
@@ -118,10 +128,14 @@ matrix Decision_Tree::Up(matrix Tiles, int m) {
 			}
 		}
 	}
+	
 	if (!change_key) {
 		benefit[m] = -1;
 	}
 	Tiles = Tiles.doAbs();
+
+	
+
 	Tiles = Set_new_tile(Tiles);
 	return Tiles;
 
@@ -147,9 +161,12 @@ matrix Decision_Tree::Left(matrix Tiles, int m) {
 						Tiles.Write(i, store_free_space, (Tiles[i][k] + Tiles[i][store_free_space]));
 					else {
 						if (type == 4)
-							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
-						else
+							benefit[m] += Tiles[i][k] + Tiles[i][store_free_space];
+						else if (type != 3)
 							benefit[m]++;
+						else
+							benefit[m] += log(Tiles[i][k]) / log(2) - 1;
+
 						Tiles.Write(i, store_free_space, -(Tiles[i][k] + Tiles[i][store_free_space]));
 					}
 					Tiles.Write(i, k, 0);
@@ -158,10 +175,15 @@ matrix Decision_Tree::Left(matrix Tiles, int m) {
 			}
 		}
 	}	
+	
+
 	if (!change_key) {
 		benefit[m] = -1;
 	}
 	Tiles = Tiles.doAbs();
+
+	
+
 	Tiles = Set_new_tile(Tiles);
 	return Tiles;
 
@@ -187,9 +209,12 @@ matrix Decision_Tree::Down(matrix Tiles, int m) {
 						Tiles.Write(store_free_space, k, (Tiles[i][k] + Tiles[store_free_space][k]));
 					else {
 						if (type == 4)
-							benefit[m] = Tiles[i][k] + Tiles[i][store_free_space];
-						else
+							benefit[m] += Tiles[i][k] + Tiles[i][store_free_space];
+						else if (type != 3)
 							benefit[m]++;
+						else
+							benefit[m] += log(Tiles[i][k]) / log(2) - 1;
+
 						Tiles.Write(store_free_space, k, -(Tiles[i][k] + Tiles[store_free_space][k]));
 					}
 					Tiles.Write(i, k, 0);
@@ -198,10 +223,14 @@ matrix Decision_Tree::Down(matrix Tiles, int m) {
 			}
 		}
 	}
+	
+
 	if (!change_key) {
 		benefit[m] = -1;
 	}
 	Tiles = Tiles.doAbs();
+
+	
 	Tiles = Set_new_tile(Tiles);
 	return Tiles;
 

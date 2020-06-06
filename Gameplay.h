@@ -13,7 +13,7 @@ class Gameplay
 private:
 	
 	Playground playground;
-	Button undo_buton, new_game_button, ai_button, tip_button, tip_tile;
+	Button undo_buton, new_game_button, ai_button, tip_button, tip_tile, animation_switch;
     bool tips_on;
 public:
 
@@ -30,11 +30,12 @@ public:
 		playground.setColor(sf::Color(187, 173, 160, 255));
         playground.setSkip_animation(0);
 		
-        undo_buton.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 435) / float(2000) * window_size, sf::Color(143, 122, 102, 255), 0, "Undo", sf::Color(255, 253, 240, 255), 1, 1);
-        new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), 0, "New Game", sf::Color(255, 253, 240, 255), 1, 1);
-        ai_button.Init(sf::Vector2f(350, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 80) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "Give AI a try", sf::Color(255, 253, 240, 255), 1, 1);
-        tip_button.Init(sf::Vector2f(350, 75) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 180) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "AI tips", sf::Color(255, 253, 240, 255), 1, 1);
-        tip_tile.Init(sf::Vector2f(250, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1000, 435) / float(2000) * window_size, sf::Color(250, 204, 170, 255), 0, "", sf::Color(103, 88, 73, 255), 0, 0);
+        undo_buton.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 435) / float(2000) * window_size, sf::Color(143, 122, 102, 255), 0, "Undo", sf::Color(255, 253, 240, 255), 1, 1,0);
+        new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), 0, "New Game", sf::Color(255, 253, 240, 255), 1, 1,0);
+        ai_button.Init(sf::Vector2f(350, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 80) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "Give AI a try", sf::Color(255, 253, 240, 255), 1, 1,0);
+        tip_button.Init(sf::Vector2f(350, 75) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 180) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "AI tips", sf::Color(255, 253, 240, 255), 1, 1,0);
+        tip_tile.Init(sf::Vector2f(250, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1000, 435) / float(2000) * window_size, sf::Color(250, 204, 170, 255), 0, "", sf::Color(103, 88, 73, 255), 0, 0,0);
+        animation_switch.Init(sf::Vector2f(250, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(150, 1800) / float(2000) * window_size, sf::Color(70, 60, 60, 255), 10, "Animation off", sf::Color(255, 253, 240, 255), 1, 0,0);
     }
 
 
@@ -69,16 +70,16 @@ public:
             //Game Over event
             if (playground.isGameOver()) {
                Game_over_scene(window);
-               //std::cout << "Failed on Try #" << test_tries + 1 << "  tiles:\n " << playground.getPground() << "\n";
-               //test_tries++; 
-               //New_game(window);
+               std::cout << "Failed on Try #" << test_tries + 1 << "  tiles:\n " << playground.getPground() << "\n";
+               test_tries++; 
+               New_game(window);
             }
 
             if (playground.isWin()) {
                 Win_scene(window);
-                //std::cout << "Succeeded on Try #" << test_tries + 1 << "\n\n";
-                //test_tries++;       
-                //New_game(window);
+                std::cout << "Succeeded on Try #" << test_tries + 1 << "\n\n";
+                test_tries++;       
+                New_game(window);
             }
                  window.display();
 
@@ -88,7 +89,6 @@ public:
                 tip_tile.Draw(window);
                 window.display();
                 skip_tip_calculation.launch();
-                //setTip();
                 tip_tile.Draw(window);
                 ai_calculated = 1; 
                 window.display();
@@ -111,7 +111,6 @@ public:
             {
                 
                 if (event.type == sf::Event::MouseButtonPressed) {
-                    playground.setAIstate(0);
 
                     Mouse_Pressed = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
 
@@ -149,6 +148,12 @@ public:
                         window.display();
                         
                     }
+                    if (animation_switch.getBounds().contains(Mouse_Pressed)) {
+                        playground.setSkip_animation(!playground.isSkipping());
+                        animation_switch.Press(window);
+                        animation_switch.Draw(window);
+                        window.display();
+                    }
                 }
 
                
@@ -179,6 +184,10 @@ public:
                 if (event.type == sf::Event::Closed)
                     window.close();
             }
+            if (!playground.isAIon() && ai_button.isPressed()) {
+                ai_button.Press(window);
+                window.display();
+            }
         }
     }
 
@@ -188,7 +197,7 @@ public:
     int AI_movement() {
         int ai_executive = 1;
         int ai_for_decision_purposes;
-        int pgr_sum_el;
+        int pgr_sum_el, pgr_max_el;
         vect to_sum_up_possibilities(4);
         matrix pgr;
         Decision_Tree decision;
@@ -196,17 +205,24 @@ public:
         pgr = playground.getPground();
         ai_for_decision_purposes = pgr.get_Zero_count();
         pgr_sum_el = pgr.getSum_el();
+        pgr_max_el = pgr.getMax_el();
         if (ai_for_decision_purposes < 5) {
             for (int i = 0; i < 6; i++) {
-                if (pgr_sum_el < 1000)
+                if (pgr_sum_el < 800)
                     decision.Init(pgr, 3, 2);
-                else
+                else if((pgr_sum_el>800&&pgr_sum_el<1100))
+                    decision.Init(pgr, 4, 3);
+                else if(pgr_sum_el > 1800)
+                    decision.Init(pgr, 5, 3);
+                else if(pgr_sum_el > 1300)
+                    decision.Init(pgr, 4, 3);
+                else 
                     decision.Init(pgr, 4, 2);
+
 
                 decision.Calculate();
                 to_sum_up_possibilities += vect(4, decision.getBenefit());
             }
-            to_sum_up_possibilities = to_sum_up_possibilities;
             return Decision_Tree().getMovement(pgr, to_sum_up_possibilities);
 
         }
@@ -430,6 +446,7 @@ public:
         ai_button.Draw(window);
         tip_button.Draw(window);
         tip_tile.Draw(window);
+        animation_switch.Draw(window);
     }
 
 

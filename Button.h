@@ -18,7 +18,7 @@ private:
 	sf::Color text_color;
 	sf::Font font;
 	int Char_Size;
-	bool active, visible;
+	bool active, visible, pressed;
 
 public:
 
@@ -44,7 +44,7 @@ public:
 		text_color = tcolor;
 	}
 
-	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor, bool vis, bool act) {
+	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor, bool vis, bool act, bool pr) {
 		body.Init(Size, R, Pos);
 		body.setColor(bodycolor);
 		outline.Init(Size + sf::Vector2f(outline_width, outline_width), R, Pos);
@@ -54,8 +54,9 @@ public:
 		Char_Size = 40;
 		visible = vis;
 		active = act;
+		pressed = pr;
 	}
-	void Init(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor, bool vis, bool act) {
+	void Init(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, int outline_width, string t, sf::Color tcolor, bool vis, bool act, bool pr) {
 		body.Init(Size, R, Pos);
 		body.setColor(bodycolor);
 		outline.Init(Size + sf::Vector2f(outline_width, outline_width), R, Pos);
@@ -65,6 +66,7 @@ public:
 		Char_Size = 40;
 		visible = vis;
 		active = act;
+		pressed = pr;
 	}
 
 	Button(sf::Vector2f Size, double R, sf::Vector2f Pos, sf::Color bodycolor, string t, int ch_size, sf::Color tcolor, bool vis, bool act) {
@@ -102,6 +104,9 @@ public:
 	bool isVisible() {
 		return visible;
 	}
+	bool isPressed() {
+		return pressed;
+	}
 
 	void setSize(sf::Vector2f s) {
 		 body.setSize(s);
@@ -123,6 +128,7 @@ public:
 
 
 	void Press(sf::RenderWindow& window) {
+		pressed = !pressed;
 		body.setColor(contrast(body.getColor()));
 		outline.setColor(contrast(outline.getColor()));
 		Draw(window);
