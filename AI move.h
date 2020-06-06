@@ -7,26 +7,26 @@
 
 //depth tree of possible movements not taking into account the appearing tiles
 //taking the number of merged tiles as benefit
-class Decision_Tree {
+class Goal_Tree {
 private:
-	Decision_Tree* possible;
+	Goal_Tree* possible;
 	int* benefit;
 	int type;
 public:
 
-	Decision_Tree() {
+	Goal_Tree() {
 		possible = 0;
 		benefit = 0;
 		type = 0;
 	}
 	//first fill out the next movements
-	Decision_Tree(const matrix& t, int depth, int typ) {
+	Goal_Tree(const matrix& t, int depth, int typ) {
 		Init(t, depth, typ);
 	}
 	void Init(const matrix& t, int depth, int typ) {
 		deconstruct(this);
 		type = typ;
-		possible = new Decision_Tree[4];
+		possible = new Goal_Tree[4];
 		benefit = new int[4]{ 0 };
 		matrix temp;
 
@@ -53,7 +53,7 @@ public:
 		if (current > end)
 			return;
 		type = typ;
-		possible = new Decision_Tree[4];
+		possible = new Goal_Tree[4];
 		benefit = new int[4]{ 0 };
 
 		matrix temp;
@@ -144,7 +144,7 @@ public:
 		}
 
 
-		Decision_Tree temp(t, 1, 4);
+		Goal_Tree temp(t, 1, 4);
 		temp.Calculate();
 		X = temp.getBenefit();
 		max = 0;
@@ -182,10 +182,10 @@ public:
 		return getMovement();
 	}
 
-	~Decision_Tree() {
+	~Goal_Tree() {
 		deconstruct(this);
 	}
-	void deconstruct(Decision_Tree* t) {
+	void deconstruct(Goal_Tree* t) {
 
 		if (t == 0)
 			return;

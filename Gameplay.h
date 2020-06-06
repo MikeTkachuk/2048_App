@@ -200,7 +200,7 @@ public:
         int pgr_sum_el, pgr_max_el;
         vect to_sum_up_possibilities(4);
         matrix pgr;
-        Decision_Tree decision;
+        Goal_Tree decision;
 
         pgr = playground.getPground();
         ai_for_decision_purposes = pgr.get_Zero_count();
@@ -223,7 +223,7 @@ public:
                 decision.Calculate();
                 to_sum_up_possibilities += vect(4, decision.getBenefit());
             }
-            return Decision_Tree().getMovement(pgr, to_sum_up_possibilities);
+            return Goal_Tree().getMovement(pgr, to_sum_up_possibilities);
 
         }
         else if (ai_for_decision_purposes < 9) {
@@ -232,7 +232,7 @@ public:
                 decision.Calculate();
                 to_sum_up_possibilities += vect(4, decision.getBenefit());
             }
-            return Decision_Tree().getMovement(pgr, to_sum_up_possibilities);
+            return Goal_Tree().getMovement(pgr, to_sum_up_possibilities);
 
         }
         else {
@@ -241,7 +241,7 @@ public:
                 decision.Calculate();
                 to_sum_up_possibilities += vect(4, decision.getBenefit());
             }
-            return Decision_Tree().getMovement(to_sum_up_possibilities);
+            return Goal_Tree().getMovement(to_sum_up_possibilities);
 
         }
         

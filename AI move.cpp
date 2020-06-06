@@ -8,7 +8,7 @@
 
 
 
-matrix Decision_Tree::Set_new_tile(matrix Tiles) {
+matrix Goal_Tree::Set_new_tile(matrix Tiles) {
 	if (type == 0)
 		return Tiles;
 	int first = rand() % (Tiles.getRow() * Tiles.getRow()), count = 0, define_power = rand() % 100;
@@ -48,7 +48,7 @@ matrix Decision_Tree::Set_new_tile(matrix Tiles) {
 
 //MOVEMENTS
 
-matrix Decision_Tree::Right(matrix Tiles, int m) {
+matrix Goal_Tree::Right(matrix Tiles, int m) {
 	bool change_key = 0;
 	int store_free_space;
 	for (int i = 0; i < Tiles.getRow(); i++) {
@@ -94,7 +94,7 @@ matrix Decision_Tree::Right(matrix Tiles, int m) {
 	return Tiles;
 }
 
-matrix Decision_Tree::Up(matrix Tiles, int m) {
+matrix Goal_Tree::Up(matrix Tiles, int m) {
 	bool change_key = 0;
 	int store_free_space;
 	for (int k = 0; k < Tiles.getRow(); k++) {
@@ -141,7 +141,7 @@ matrix Decision_Tree::Up(matrix Tiles, int m) {
 
 }
 
-matrix Decision_Tree::Left(matrix Tiles, int m) {
+matrix Goal_Tree::Left(matrix Tiles, int m) {
 	bool change_key = 0;
 	int store_free_space;
 
@@ -189,7 +189,7 @@ matrix Decision_Tree::Left(matrix Tiles, int m) {
 
 }
 
-matrix Decision_Tree::Down(matrix Tiles, int m) {
+matrix Goal_Tree::Down(matrix Tiles, int m) {
 	bool change_key = 0;
 	int store_free_space;
 	
