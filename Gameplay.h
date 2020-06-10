@@ -30,12 +30,71 @@ public:
 		playground.setColor(sf::Color(187, 173, 160, 255));
         playground.setSkip_animation(0);
 		
-        undo_buton.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 435) / float(2000) * window_size, sf::Color(143, 122, 102, 255), 0, "Undo", sf::Color(255, 253, 240, 255), 1, 1,0);
-        new_game_button.Init(sf::Vector2f(230, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1375, 235) / float(2000) * window_size, sf::Color(103, 88, 73, 255), 0, "New Game", sf::Color(255, 253, 240, 255), 1, 1,0);
-        ai_button.Init(sf::Vector2f(350, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 80) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "Give AI a try", sf::Color(255, 253, 240, 255), 1, 1,0);
-        tip_button.Init(sf::Vector2f(350, 75) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(200, 180) / float(2000) * window_size, sf::Color(60, 60, 60, 255), 7, "AI tips", sf::Color(255, 253, 240, 255), 1, 1,0);
-        tip_tile.Init(sf::Vector2f(250, 90) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(1000, 435) / float(2000) * window_size, sf::Color(250, 204, 170, 255), 0, "", sf::Color(103, 88, 73, 255), 0, 0,0);
-        animation_switch.Init(sf::Vector2f(250, 70) / float(2000) * window_size, 10 / float(2000) * window_size, sf::Vector2f(150, 1800) / float(2000) * window_size, sf::Color(70, 60, 60, 255), 10, "Animation off", sf::Color(255, 253, 240, 255), 1, 0,0);
+        undo_buton.Init(
+            sf::Vector2f(230, 70) / float(2000) * window_size,
+            10 / float(2000) * window_size,
+            sf::Vector2f(1375, 435) / float(2000) * window_size,
+            sf::Color(143, 122, 102, 255),
+            0,
+            "Undo",
+            sf::Color(255, 253, 240, 255),
+            1, 1, 0
+        );
+
+        new_game_button.Init(
+            sf::Vector2f(230, 70) / float(2000) * window_size,
+            10 / float(2000) * window_size,
+            sf::Vector2f(1375, 235) / float(2000) * window_size,
+            sf::Color(103, 88, 73, 255),
+            0,
+            "New Game",
+            sf::Color(255, 253, 240, 255),
+            1, 1, 0
+        );
+
+        ai_button.Init(
+            sf::Vector2f(350, 90) / float(2000) * window_size,
+            10 / float(2000) * window_size,
+            sf::Vector2f(200, 80) / float(2000) * window_size,
+            sf::Color(60, 60, 60, 255),
+            7,
+            "Give AI a try",
+            sf::Color(255, 253, 240, 255),
+            1, 1, 0
+        );
+
+        tip_button.Init(
+            sf::Vector2f(350, 75) / float(2000) * window_size,
+            10 / float(2000) * window_size,
+            sf::Vector2f(200, 180) / float(2000) * window_size,
+            sf::Color(60, 60, 60, 255),
+            7,
+            "AI tips",
+            sf::Color(255, 253, 240, 255),
+            1, 1, 0
+        );
+
+        tip_tile.Init(
+            sf::Vector2f(250, 90) / float(2000) * window_size,
+            10 / float(2000) * window_size,
+            sf::Vector2f(1000, 435) / float(2000) * window_size,
+            sf::Color(250, 204, 170, 255),
+            0,
+            "",
+            sf::Color(103, 88, 73, 255),
+            0, 0, 0
+        );
+
+        animation_switch.Init(
+            sf::Vector2f(250, 70) / float(2000) * window_size,
+            10 / float(2000) * window_size,
+            sf::Vector2f(150, 1800) / float(2000) * window_size,
+            sf::Color(70, 60, 60, 255),
+            10,
+            "Animation off",
+            sf::Color(255, 253, 240, 255),
+            1, 0, 0
+        );
     }
 
 
@@ -70,16 +129,16 @@ public:
             //Game Over event
             if (playground.isGameOver()) {
                Game_over_scene(window);
-               std::cout << "Failed on Try #" << test_tries + 1 << "  tiles:\n " << playground.getPground() << "\n";
-               test_tries++; 
-               New_game(window);
+               //std::cout << "Failed on Try #" << test_tries + 1 << "  tiles:\n " << playground.getPground() << "\n";
+               //test_tries++; 
+               //New_game(window);
             }
 
             if (playground.isWin()) {
                 Win_scene(window);
-                std::cout << "Succeeded on Try #" << test_tries + 1 << "\n\n";
-                test_tries++;       
-                New_game(window);
+                //std::cout << "Succeeded on Try #" << test_tries + 1 << "\n\n";
+                //test_tries++;       
+                //New_game(window);
             }
                  window.display();
 
@@ -88,10 +147,12 @@ public:
                 tip_tile.setText("");
                 tip_tile.Draw(window);
                 window.display();
+
                 skip_tip_calculation.launch();
                 tip_tile.Draw(window);
                 ai_calculated = 1; 
                 window.display();
+
 
             }
             
@@ -188,6 +249,7 @@ public:
                 ai_button.Press(window);
                 window.display();
             }
+
         }
     }
 

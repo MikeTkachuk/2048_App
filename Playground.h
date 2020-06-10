@@ -340,7 +340,7 @@ public:
 		}
 		int move_interruption = 0;
 
-		if (New_tile.x > -1 && New_tile.y > -1 && !skip_animation) {
+		if (New_tile.x > -1 && New_tile.y > -1 ) {		
 			move_interruption = Movement_animation(window, movement_type, New_tile);
 		}
 		
@@ -365,7 +365,7 @@ public:
 			Win_animation(window);
 		}
 
-		if (move_interruption != 0 && !game_over && !skip_animation) {
+		if (move_interruption != 0 && !game_over ) {   
 			Movement(window, move_interruption);
 		}
 
@@ -750,6 +750,11 @@ public:
 	
 
 	int Movement_animation(sf::RenderWindow& window, int movement_type, sf::Vector2i new_tile_index) {
+		if (skip_animation) {
+			Draw_Pground(window);
+			window.display();
+			return 0;
+		}
 		int shift_st = 0, shift_ed = 6, merge_st = 5, merge_ed = 12, new_tile_st = 8, new_tile_ed = 11, end=11;
 		int frame = 0;
 		matrix Merged = Merged_tiles(movement_type);
@@ -823,7 +828,13 @@ public:
 		for (int i = 0; i < tile_count; i++) {
 			for (int k = 0; k < tile_count; k++) {
 				if (Movement_Backup[i][k] != 0) {
-					Draw_Tile(window, Movement_Backup[i][k], sf::Vector2f(i, k) + direction * float(Change[i][k]) * float(frame) / float(max_frame), 1, 255);
+					Draw_Tile(
+						window,
+						Movement_Backup[i][k],
+						sf::Vector2f(i, k) + direction * float(Change[i][k]) * float(frame) / float(max_frame),
+						1,
+						255
+					);
 				}
 			}
 		}
@@ -831,7 +842,13 @@ public:
 
 	void New_tile_animation(sf::RenderWindow& window, sf::Vector2i index, int frame, int max_frame) {
 			
-		Draw_Tile(window, Tiles[index.x][index.y], sf::Vector2f(index.x, index.y), frame/double(max_frame), 255*frame/double(max_frame));
+		Draw_Tile(
+			window,
+			Tiles[index.x][index.y],
+			sf::Vector2f(index.x, index.y),
+			frame/double(max_frame),
+			255*frame/double(max_frame)
+		);
 		
 	}
 
@@ -846,7 +863,13 @@ public:
 			for (int i = 0; i < tile_count; i++) {
 				for (int k = 0; k < tile_count; k++) {
 					if (Merged[i][k] != 0)
-						Draw_Tile(window, Tiles[i][k], sf::Vector2f(i, k), frame / double(max_frame), 255 * frame / double(max_frame));
+						Draw_Tile(
+							window,
+							Tiles[i][k],
+							sf::Vector2f(i, k),
+							frame / double(max_frame),
+							255 * frame / double(max_frame)
+						);
 				}
 			}
 		}
@@ -854,7 +877,12 @@ public:
 			for (int i = 0; i < tile_count; i++) {
 				for (int k = 0; k < tile_count; k++) {
 					if (Merged[i][k] != 0)
-						Draw_Tile(window, Tiles[i][k], sf::Vector2f(i, k), 1.1*frame / double(max_frame*0.8), 255 );
+						Draw_Tile(window,
+							Tiles[i][k],
+							sf::Vector2f(i, k),
+							1.1*frame / double(max_frame*0.8),
+							255 
+						);
 				}
 			}
 		}
@@ -862,7 +890,13 @@ public:
 			for (int i = 0; i < tile_count; i++) {
 				for (int k = 0; k < tile_count; k++) {
 					if (Merged[i][k] != 0)
-						Draw_Tile(window, Tiles[i][k], sf::Vector2f(i, k),1.1 - 0.1 *(frame-0.8*max_frame) / double(0.2*max_frame), 255);
+						Draw_Tile(
+							window,
+							Tiles[i][k],
+							sf::Vector2f(i, k),
+							1.1 - 0.1 *(frame-0.8*max_frame) / double(0.2*max_frame),
+							255
+						);
 				}
 			}
 		}

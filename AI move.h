@@ -217,9 +217,6 @@ public:
 
 
 
-class General_Move {
-
-};
 
 
 #endif // !AI_move

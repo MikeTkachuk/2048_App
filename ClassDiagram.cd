@@ -1,2 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Goal_Tree">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ABAAAEICAAAAEACAAAEAAAEAACABAAAACACGARAAAAI=</HashCode>
+      <FileName>AI move.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button">
+    <Position X="4.5" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AEYIKAAAAIABAggAIBAAAFCCAQAAAAAIQAACKEAAAAA=</HashCode>
+      <FileName>Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Smooth_rect">
+    <Position X="6.25" Y="1.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAIIAACIAAAgggAIAAAAACAAAAAACAAAACgAAIAAA=</HashCode>
+      <FileName>Draw_Sh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Playground">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>DAGAoAEAAIBECgAJBKEIAAGgBQAASgbAAAAGgABKCFI=</HashCode>
+      <FileName>Playground.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gameplay">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>EAQAAAgBAAAAIAAEAAACAAABBggAAAAAEAAgAgEAACM=</HashCode>
+      <FileName>Gameplay.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
